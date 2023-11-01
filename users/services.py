@@ -50,3 +50,14 @@ class UserService:
 
         except TokenError:
             raise InvalidToken()
+        
+    def check_email(self, email: str):
+        user_selector = UserSelector()
+
+        check_email = user_selector.check_email(email)
+
+        if(check_email):
+            return '존재하는 이메일입니다.'
+        
+        return '존재하지 않는 이메일입니다.'
+        

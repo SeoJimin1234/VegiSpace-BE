@@ -36,7 +36,7 @@ class UserSelector:
     #주어진 이메일을 가진 사용자 객체가 존재하는지 여부 리턴
     @staticmethod
     def check_email(email: str):
-        return UserData.object.filter(email=email).exist()
+        return UserData.objects.filter(email=email).exists()
     
     #주어진 닉네임을 가진 사용자 객체가 존재하는지 여부 리턴
     @staticmethod

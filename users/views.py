@@ -214,3 +214,44 @@ class UserLogoutApi(APIView, ApiAuthMixin):
         return Response({
             'status': 'success',
         }, status=status.HTTP_200_OK)
+    
+class UserEmailCheckApi(APIView):
+    permission_classes = (AllowAny,)
+
+    class EmailCheckSerializer(serializers.Serializer):
+        email = serializers.EmailField()
+
+    @swagger_auto_schema(
+            request_body=EmailCheckSerializer,
+            operation_summary='''이메일 체크''',
+            operation_description='''email 필드 입력시 해당 이메일이 DB에 존재하는지 확인''',
+            responses={
+                "200": openapi.Response(
+                    description="OK",
+                    examples={
+                        "application/json":{
+                            "status":'success'
+                        }
+                    }
+                ),
+                "400": openapi.Response(
+                    description="Bad Request",
+                ),
+            },
+    )
+
+    def post(self, request):
+        serializer = self.EmailCheckSerializer(data=request.data)
+        serializer.is_valid()
+        data = serializer.validated_data
+
+        service = UserService()
+
+        check_email_message = service.check_email(
+            email = data.get('email')
+        )
+
+        return Response({
+            'status': 'success',
+            'data': check_email_message,
+        },status = status.HTTP_200_OK)
